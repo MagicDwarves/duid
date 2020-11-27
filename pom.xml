@@ -8,6 +8,23 @@
     <artifactId>duid</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>A distributed append only database for map strings to integer numbers</description>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Ruslan Markelov</name>
+            <email>iam.balmaster@gmail.com</email>
+            <organization>MagicDwarves</organization>
+            <organizationUrl>https://github.com/orgs/MagicDwarves</organizationUrl>
+        </developer>
+    </developers>
 
     <properties>
         <git.base.url></git.base.url>
@@ -37,19 +54,16 @@
     </modules>
 
     <scm>
-        <developerConnection>scm:git:${git.base.url}/duid.git</developerConnection>
-        <tag>HEAD</tag>
+        <connection>scm:git:git://github.com/MagicDwarves/duid.git</connection>
+        <developerConnection>scm:git:ssh://github.com:MagicDwarves/duid.git</developerConnection>
+        <url>http://github.com/MagicDwarves/duid/tree/master</url>
     </scm>
 
     <distributionManagement>
         <repository>
-            <id>duid-release</id>
-            <url>${nexus.release.url}</url>
+            <id>duid</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
-        <snapshotRepository>
-            <id>duid-snapshot</id>
-            <url>${nexus.snapshot.url}</url>
-        </snapshotRepository>
     </distributionManagement>
 
     <dependencyManagement>
@@ -105,6 +119,32 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
@@ -187,4 +227,28 @@
 
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>sign</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
