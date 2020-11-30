@@ -19,7 +19,7 @@ abstract class AbstractDuidDatabaseImpl(context: DuidDatabaseContext) : DuidData
 
     val basedir = context.getRequired(context.basedir, "basedir")!!
 
-    val root = DuidNamespaceImpl(this, 0, basedir).read()
+    val root = DuidNamespaceImpl(this, 0, basedir)
 
     override fun getRoot(): DuidNamespace = root
 
@@ -104,6 +104,9 @@ class DuidNamespaceImpl(database: AbstractDuidDatabaseImpl, id: Int, basedir: Fi
                 dirty = true
                 val nextId = (namespaces.values.map { it.id }.max() ?: 0) + 1
                 DuidNamespaceImpl(database, nextId, fileName(basedir, "$nextId"))
+                        .also { namespace ->
+                            namespace.dirty = true
+                        }
             }
 
     override fun getMaps(): Map<String, DuidMap> = maps.mapValues { it.value as DuidMap }

@@ -10,6 +10,7 @@ class DuidTest {
     @Test
     fun testOpen() {
         FsDuidDatabase(DuidDatabaseContext(File("src/test/database"))).apply {
+            pull()
             assertEquals(3, root.maps.size)
             root.getOrCreateNamespace("namespace1").also { namespace ->
                 namespace.getOrCreateMap("map1").also { map ->
@@ -35,6 +36,7 @@ class DuidTest {
         }
 
         FsDuidDatabase(DuidDatabaseContext(basedir)).apply {
+            pull()
             assertEquals(1, root.maps.size)
             root.getMap("testMap").also { map ->
                 assertEquals(1, map.getValue("testKey"))
@@ -54,6 +56,29 @@ class DuidTest {
         }
 
         FsDuidDatabase(DuidDatabaseContext(basedir)).apply {
+            pull()
+            assertEquals(1, root.getNamespaces().size)
+            root.getNamespace("test1").also { namespace ->
+                assertNotNull(namespace)
+            }
+            assertFalse(isDirty())
+        }
+    }
+
+    @Test
+    fun testResourceDatabase() {
+        val basedir = File("target/test-classes/database1")
+        FsDuidDatabase(DuidDatabaseContext(basedir)).apply {
+            root.getOrCreateNamespace("test1").also { namespace ->
+            }
+            root.write()
+            assertFalse(isDirty())
+        }
+
+        ResourceDuidDatabase(ResourcesDuidDatabaseContext().apply {
+            this.basedir = File("database1")
+        }).apply {
+            pull()
             assertEquals(1, root.getNamespaces().size)
             root.getNamespace("test1").also { namespace ->
                 assertNotNull(namespace)
