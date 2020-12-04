@@ -44,6 +44,9 @@
         <maven.plugin.plugin.version>3.5</maven.plugin.plugin.version>
         <maven.project.version>2.0.6</maven.project.version>
         <slf4j.version>1.7.30</slf4j.version>
+
+        <nexus.release.url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</nexus.release.url>
+        <nexus.snapshot.url></nexus.snapshot.url>
     </properties>
 
     <modules>
@@ -62,8 +65,12 @@
     <distributionManagement>
         <repository>
             <id>duid</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <url>${nexus.release.url}</url>
         </repository>
+        <snapshotRepository>
+            <id>duid-snapshot</id>
+            <url>${nexus.snapshot.url}</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <dependencyManagement>
